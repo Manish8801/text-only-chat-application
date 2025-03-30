@@ -10,14 +10,7 @@ const getUsersForSidebar: TRouteHandler = async (req, res) => {
 
     const users = await User.find({ _id: { $ne: userId } }).select("-password");
     ;
-    res.status(200).json({
-      users: users.map((user) => {
-        return {
-          ...user._doc,
-          fullname: formatNameArr(user.fullname).join(" "),
-        };
-      }),
-    });
+    res.status(200).json({users});
   } catch (eror) {
     console.log("Error in getUsersForSidebar controller");
     res.status(500).json({
