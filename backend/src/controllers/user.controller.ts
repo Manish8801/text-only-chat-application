@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/user.model.js";
+import formatNameArr from "../utils/formatNameArr.js";
 
 type TRouteHandler = (req: Request, res: Response) => Promise<void>;
 
@@ -8,8 +9,15 @@ const getUsersForSidebar: TRouteHandler = async (req, res) => {
     const userId = req.user!._id;
 
     const users = await User.find({ _id: { $ne: userId } }).select("-password");
-
-    res.status(200).json({ users });
+    ;
+    res.status(200).json({
+      users: users.map((user) => {
+        return {
+          ...user._doc,
+          fullname: formatNameArr(user.fullname).join(" "),
+        };
+      }),
+    });
   } catch (eror) {
     console.log("Error in getUsersForSidebar controller");
     res.status(500).json({

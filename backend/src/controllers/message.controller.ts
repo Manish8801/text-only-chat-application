@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Chat from "../models/chat.model.js";
 import Message from "../models/message.model.js";
+import { getReceiverId, io } from "../socket/socket.js";
 
 type TRouteHandler = (req: Request, res: Response) => Promise<void>;
 
@@ -29,7 +30,14 @@ const sendMessage: TRouteHandler = async (req, res) => {
       chat.messages.push(newMessage._id);
       await chat.save();
     }
-    res.status(201).json({ message: "Message sent successfully" });
+
+    const receiverSocketId = getReceiverId(receiverId);
+
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("receiveMessage", newMessage);
+    }
+
+    res.status(201).json(newMessage);
   } catch (error) {
     console.log("Error in sendMessage controller");
     console.error(error);
@@ -54,7 +62,7 @@ const getMessages: TRouteHandler = async (req, res) => {
       return;
     }
 
-    res.status(200).json({ messages : chat.messages });
+    res.status(200).json({ messages: chat.messages });
   } catch (error) {
     console.log("Error in getMessages controller");
     console.error(error);

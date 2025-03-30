@@ -1,8 +1,7 @@
-import { ISignUserInfo } from "../types/SignUserInfo.type.js";
 import formatName from "../utils/formatNameArr.js";
 import getAvatar from "./getAvatar.js";
 
-function validateUser(userInfo: ISignUserInfo) {
+function validateUser(userInfo: any) {
   const { fullname, username, password, confirmPassword, gender, imageURL } =
     userInfo;
 

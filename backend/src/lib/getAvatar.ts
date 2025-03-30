@@ -1,9 +1,12 @@
 import formatName from "../utils/formatNameArr.js";
 
+function getRandomNum(from: number, upto: number) {
+  return from + Math.floor(Math.random() * (upto - from + 1));
+}
 
 const BASE_URL = "https://avatar.iran.liara.run";
-const MALE_AVATAR = BASE_URL + "/public/boy";
-const FEMALE_AVATAR = BASE_URL + "/public/girl";
+const MALE_AVATAR = BASE_URL + "/public/" + getRandomNum(1, 50);
+const FEMALE_AVATAR = BASE_URL + "/public/" + getRandomNum(50, 100);
 const AVATAR_BY_NAME = BASE_URL + "/username?username=";
 
 function getAvatar(gender: string, fullname: string) {

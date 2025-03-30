@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 import validateUser from "../lib/validateUser.js";
 import { compare, genSalt, hash } from "bcryptjs";
 import generateToken from "../lib/generateToken.js";
+import formatNameArr from "../utils/formatNameArr.js";
 
 type TRouteHandler = (req: Request, res: Response) => Promise<void>;
 
@@ -20,18 +21,26 @@ const signup: TRouteHandler = async (req, res) => {
     }
 
     if (validUser) {
-      const { password } = validUser;
+      const { fullname, password } = validUser;
+
       const salt = await genSalt(12);
       const hashedPassword = await hash(password, salt);
 
       validUser.password = hashedPassword;
+      validUser.fullname = fullname.toLowerCase();
+
+      const user = await User.create(validUser);
+
+      generateToken(user._id, res);
+
+      const { _id, username, profilePic } = user;
+      res.status(201).json({
+        _id,
+        fullname: formatNameArr(fullname).join(" "),
+        username,
+        profilePic,
+      });
     }
-
-    const user = await User.create(validUser);
-
-    generateToken(user._id, res);
-
-    res.status(201).json({ message: "User created successfully" });
   } catch (error) {
     if ((error as any).code === 11000) {
       res.status(400).json({

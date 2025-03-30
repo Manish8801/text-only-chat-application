@@ -17,7 +17,6 @@ const protectRoute = async (
 ) => {
   try {
     const token = req.cookies.auth_token;
-
     if (!token) {
       res.status(401).json({
         error: "Unauthorized",

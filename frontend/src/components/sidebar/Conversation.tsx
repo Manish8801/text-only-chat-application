@@ -1,22 +1,38 @@
-const Conversation = () => {
+import useSocketContext from "../../hooks/useSocketContext";
+import { IConversationProps } from "../../prop_types/prop-types";
+import useConversation from "../../zustand/useConversation";
+
+const Conversation = ({ conversation, lastIdx, emoji }: IConversationProps) => {
+  const { selectedConversation, setSelectedConversation } = useConversation();
+  const { onlineUsers } = useSocketContext();
+
+  const { _id, profilePic, fullname } = conversation;
+  const isSelected = _id === selectedConversation?._id;
+  const isOnline = onlineUsers.includes(_id);
+
   return (
     <>
-      <div className="flex gap-2 items-center hover:bg-sky-500 rounded cursor-pointer">
-        <div className="avatar avatar-online">
-          <div className="w-14 rounded-full">
-            <img src="https://cdn0.iconfinder.com/data/icons/communication-line-10/24/account_profile_user_contact_person_avatar_placeholder-512.png" />
+      <div
+        onClick={() => setSelectedConversation(conversation)}
+        className={`flex py-1 items-center ${
+          isSelected ? "bg-sky-500" : "hover:bg-sky-300"
+        } px-2 duration-100 cursor-pointer`}
+      >
+        <div className={`avatar ${isOnline ? "avatar-online" : ""} `}>
+          <div className="w-12 rounded-full p-1 ">
+            <img src={profilePic} />
           </div>
         </div>
 
-        <div className="flex flex-col flex-1">
-          <div className="flex gap-3 justify-between">
-            <p className="font-bold text-gray-200">John Doe</p>
-            <span className="text-xl">🎃</span>
+        <div className="flex-1">
+          <div className="flex gap-3 items-center justify-between">
+            <p className="font-bold text-gray-200">{fullname}</p>
+            <span className="text-xl">{emoji}</span>
           </div>
         </div>
       </div>
 
-      <div className="divider my-0 py-0 h-1" />
+      {!lastIdx && <div className="divider m-0 p-0 h-px"></div>}
     </>
   );
 };
