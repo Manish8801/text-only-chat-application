@@ -2,7 +2,7 @@
   "name": "project2",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "/backend/dist/app.js",
   "scripts": {
     "build" : "npm install && npm install --prefix frontend && npm run build --prefix frontend",
     "start" : "node backend/dist/app.js",
