@@ -6,10 +6,10 @@ const server = http.createServer(app);
 // {userId : socketId}
 const userSocketMap = {};
 const io = new Server(server, {
-    cors: {
-        origin: ["http://localhost:3000"],
-        methods: ["GET", "POST"],
-    },
+  cors: {
+    origin: ["https://text-only-chat-application-4.onrender.com"],
+    methods: ["GET", "POST"],
+  },
 });
 const getReceiverId = (receiverId) => {
     return userSocketMap[receiverId];
