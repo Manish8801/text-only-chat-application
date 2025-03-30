@@ -3,12 +3,11 @@ import { IoSearchSharp } from "react-icons/io5";
 import type { FormEvent } from "react";
 import useGetConversations from "../../hooks/useGetConversations";
 import toast from "react-hot-toast";
-import Conversations from "./Conversations";
 import useConversation from "../../zustand/useConversation";
 
 const SearchInput = () => {
   const [search, setSearch] = useState<string>("");
-  const { selectedConversation, setSelectedConversation } = useConversation();
+  const {  setSelectedConversation } = useConversation();
   const { conversations } = useGetConversations();
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
