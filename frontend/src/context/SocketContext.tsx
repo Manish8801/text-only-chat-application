@@ -13,11 +13,14 @@ const SocketContextProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (user) {
-      const newSocket = io("http://localhost:5000", {
-        query: {
-          userId: user._id,
-        },
-      });
+      const newSocket = io(
+        "https://text-only-chat-application-4.onrender.com",
+        {
+          query: {
+            userId: user._id,
+          },
+        }
+      );
 
       setSocket(newSocket);
 
